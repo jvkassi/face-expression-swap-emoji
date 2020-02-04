@@ -5,29 +5,34 @@ export class App {
   private canvas: HTMLCanvasElement;
   private videoElement: HTMLVideoElement;
   // 60 images per seconds
-  private FPS: number = 60;
+  private FPS: number = 60 * 1.5;
   context: CanvasRenderingContext2D;
   private faceapi = faceapi;
 
-  async detectFace() {
-    const canvas = this.canvas;
-    const context = this.context;
-    context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+  async detectFace(canvas) {
+    // launch function when request new Frame
+    requestAnimationFrame(() => {
+      // console.log(this)
+      this.detectFace(canvas);
+    });
+
+    const context = canvas.getContext("2d");
+    const videoElement = document.querySelector("video");
 
     let detection = await faceapi
       // .detectAllFaces(
       .detectSingleFace(
-        canvas,
-        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.1 })
+        // canvas,
+        videoElement,
+        // new faceapi.TinyFaceDetectorOptions({ minConfidence: 0.1 })
+        new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.03 })
       )
       // .withFaceLandmarks()
       .withFaceExpressions();
 
-      // if no face found try again
-    if (!detection) {
-      setTimeout(() => this.detectFace(), 1000 / this.FPS);
-      return;
-    }
+    console.log(detection);
+    // if no face found try again
+    if (!detection) return;
 
     const displaySize = {
       width: canvas.width,
@@ -36,9 +41,28 @@ export class App {
 
     detection = faceapi.resizeResults(detection, displaySize);
     let expression = detection.expressions.asSortedArray()[0].expression;
+    console.log(expression);
     let box = detection.detection.box;
-    this.drawEmoji(box, expression);
-    setTimeout(() => this.detectFace(), 1000 / this.FPS);
+    let emoji = new Image();
+    emoji.src = `/emojis/${expression}.png`;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    context.drawImage(
+      emoji,
+      0,
+      0,
+      512,
+      512,
+      box.x,
+      box.y,
+      box.width,
+      box.height
+    );
+    // setTimeout(() => this.detectFace(), 1000 / this.FPS);
+    // requestAnimationFrame(() => {
+    //   // console.log(this)
+    //   this.detectFace()
+    // })
   }
 
   async drawEmoji(box, expression) {
@@ -59,10 +83,6 @@ export class App {
 
   public async attached() {
     await this.loadModel();
-    this.canvas = document.querySelector("canvas");
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    this.context = this.canvas.getContext("2d");
 
     this.getMediaStream().then((stream: MediaStream) => {
       if (this.videoElement.srcObject !== undefined) {
@@ -77,7 +97,16 @@ export class App {
         "play",
         async () => {
           console.log("play");
-          this.detectFace();
+          const canvas: HTMLCanvasElement = document.createElement("canvas");
+          // canvas.offsetTop = this.videoElement.offsetHeight
+
+          canvas.height = this.videoElement.videoHeight;
+          canvas.height = window.innerHeight;
+          canvas.width =  document.querySelector('video').clientWidth;
+          // canvas.width = this.videoElement.videoWidth;
+          // this.videoElement.
+          document.body.appendChild(canvas);
+          this.detectFace(canvas);
         },
         false
       );
@@ -123,12 +152,12 @@ export class App {
   // }
 
   async loadModel() {
-    // console.log(Object.keys(faceapi.nets.ssdMobilenetv1));
-    // console.log(faceapi.nets.ssdMobilenetv1.isLoaded);
-    await faceapi.loadSsdMobilenetv1Model("/models");
-    await faceapi.loadFaceDetectionModel("/models");
-    // await faceapi.loadFaceLandmarkModel("/models");
+    // await faceapi.loadSsdMobilenetv1Model("/models");
+    await faceapi.loadTinyFaceDetectorModel("/models");
+    // await faceapi.loadFaceDetectionModel("/models");
     await faceapi.loadFaceExpressionModel("/models");
+    // faceapi.nets.faceExpressionNet.isLoaded
+    // await faceapi.loadFaceLandmarkModel("/models");
     // await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
   }
 }
