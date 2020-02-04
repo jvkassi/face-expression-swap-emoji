@@ -102,8 +102,6 @@ export class App {
           const canvas: HTMLCanvasElement = document.createElement("canvas");
           // set canvas height and width to video element dims
           canvas.height = this.videoElement.videoHeight;
-          // canvas.height = window.innerHeight;
-          // canvas.width =  document.querySelector('video').clientWidth;
           canvas.width = this.videoElement.videoWidth;
           // this.videoElement.
           document.body.appendChild(canvas);
