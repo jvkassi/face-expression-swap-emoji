@@ -5,7 +5,7 @@ export class App {
   private canvas: HTMLCanvasElement;
   private videoElement: HTMLVideoElement;
   // 60 images per seconds
-  private FPS: number = 60 * 1.5;
+  private FPS: number = 25;
   context: CanvasRenderingContext2D;
   private faceapi = faceapi;
 
