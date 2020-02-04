@@ -1,5 +1,6 @@
 <template>
   <!-- ${expression} -->
-  <canvas id="overlay"></canvas>
+  <h1 hide.bind="faceapi.nets.ssdMobilenetv1.isLoaded">Loading</h1>
+  <canvas id="overlay" show.bind="faceapi.nets.ssdMobilenetv1.isLoaded"></canvas>
   <video autoplay="true" class="aurelia-hide" ref="videoElement" ></video>
 </template>
