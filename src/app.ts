@@ -27,7 +27,7 @@ export class App {
         // canvas,
         videoElement,
         // new faceapi.TinyFaceDetectorOptions({ minConfidence: 0.1 })
-        new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.03 })
+        new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.01 })
       )
       // .withFaceLandmarks()
       .withFaceExpressions();
