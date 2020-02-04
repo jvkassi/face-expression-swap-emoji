@@ -103,7 +103,6 @@ export class App {
           // set canvas height and width to video element dims
           canvas.height = this.videoElement.videoHeight;
           canvas.width = this.videoElement.videoWidth;
-          // this.videoElement.
           document.body.appendChild(canvas);
           this.detectFace(canvas);
         },
