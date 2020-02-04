@@ -11,10 +11,12 @@ export class App {
 
   async detectFace(canvas) {
     // launch function when request new Frame
-    requestAnimationFrame(() => {
-      // console.log(this)
-      this.detectFace(canvas);
-    });
+    // requestAnimationFrame(() => {
+    //   // console.log(this)
+    // });
+    setTimeout(() => {
+        this.detectFace(canvas);
+    }, 1000 / this.FPS)
 
     const context = canvas.getContext("2d");
     const videoElement = document.querySelector("video");
