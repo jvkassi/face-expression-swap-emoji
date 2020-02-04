@@ -1,8 +1,8 @@
 {
    "root": "dist/",
-  "headers": {
+   "headers": {
     "/**": {
       "Cache-Control": "public, max-age=512000"
-    },
+    }
   }
 }
