@@ -100,8 +100,7 @@ export class App {
         async () => {
           console.log("play");
           const canvas: HTMLCanvasElement = document.createElement("canvas");
-          // canvas.offsetTop = this.videoElement.offsetHeight
-
+          // set canvas height and width to video element dims
           canvas.height = this.videoElement.videoHeight;
           // canvas.height = window.innerHeight;
           // canvas.width =  document.querySelector('video').clientWidth;
