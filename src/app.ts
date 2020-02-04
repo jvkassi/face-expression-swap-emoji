@@ -101,9 +101,9 @@ export class App {
           // canvas.offsetTop = this.videoElement.offsetHeight
 
           canvas.height = this.videoElement.videoHeight;
-          canvas.height = window.innerHeight;
-          canvas.width =  document.querySelector('video').clientWidth;
-          // canvas.width = this.videoElement.videoWidth;
+          // canvas.height = window.innerHeight;
+          // canvas.width =  document.querySelector('video').clientWidth;
+          canvas.width = this.videoElement.videoWidth;
           // this.videoElement.
           document.body.appendChild(canvas);
           this.detectFace(canvas);
